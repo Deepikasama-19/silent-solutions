@@ -1,0 +1,51 @@
+// Define pin numbers
+const int flexSensor1Pin = A0;  // Flex sensor 1 connected to analog pin A0
+const int flexSensor2Pin = A1;  // Flex sensor 2 connected to analog pin A1
+const int buzzerPin = 9;         // Buzzer connected to digital pin 9
+const int ledPin = 13;           // LED connected to digital pin 13
+
+// Threshold values for gesture recognition
+const int threshold = 300;       // Adjust based on your calibration
+
+void setup() {
+Serial.begin(9600);            // Start serial communication
+pinMode(buzzerPin, OUTPUT);    // Set buzzer pin as output
+pinMode(ledPin, OUTPUT);        // Set LED pin as output
+}
+
+void loop() {
+  // Read flex sensor values
+  int flexValue1 = analogRead(flexSensor1Pin);
+  int flexValue2 = analogRead(flexSensor2Pin);
+
+// Print sensor values for debugging
+Serial.print("Flex Sensor 1: ");
+Serial.print(flexValue1);
+Serial.print(" | Flex Sensor 2: ");
+Serial.println(flexValue2);
+
+  // Gesture recognition logic
+  if (flexValue1 < threshold && flexValue2 < threshold) {
+    // Gesture recognized: "Closed Fist"
+Serial.println("Gesture: Closed Fist");
+digitalWrite(buzzerPin, HIGH); // Activate buzzer
+digitalWrite(ledPin, HIGH);     // Turn on LED
+delay(1000);                    // Keep it on for 1 second
+  } else if (flexValue1 > threshold && flexValue2 < threshold) {
+    // Gesture recognized: "Open Hand"
+Serial.println("Gesture: Open Hand");
+digitalWrite(buzzerPin, HIGH); // Activate buzzer
+digitalWrite(ledPin, LOW);      // Turn off LED
+delay(1000);                    // Keep it on for 1 second
+  } else {
+    // No recognized gesture
+digitalWrite(buzzerPin, LOW);  // Deactivate buzzer
+digitalWrite(ledPin, LOW);      // Turn off LED
+  }
+
+  // Short delay before the next reading
+delay(100);
+}
+
+
+
